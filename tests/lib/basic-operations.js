@@ -55,6 +55,25 @@ describe('DynamoDBStore', function() {
 
   });
 
+  it('should not call the AWS API multiple times to describe table', function(done) {
+
+    var store = new DynamoDBStore({
+      tableName: 'Table-HashKey',
+      dbConnector: mocks.connectorMock
+    });
+
+    var spy = sinon.spy(mocks.connectorMock, 'describeTable');
+
+    store.getTable(function(err, table) {
+      store.getTable(function(err, table) {
+        expect(spy).to.have.been.calledOnce
+        spy.restore();
+        done();
+      });
+    });
+
+  });
+
   it('should use consistent reads by default', function(done) {
 
     var store = new DynamoDBStore({
