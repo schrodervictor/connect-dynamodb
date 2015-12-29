@@ -165,4 +165,41 @@ describe('DynamoDBStore', function() {
     });
   });
 
+
+  describe('#set(sid, session, callback)', function() {
+    it('should be able to save the session for a given sid', function(done) {
+      var store = new DynamoDBStore({
+        tableName: 'Table-HashKey',
+        dbConnector: mocks.connectorMock
+      });
+
+      var sessionToSave = {
+        key1: 'some session data',
+        key2: 12345
+      };
+
+      var expectedQuery = {
+        TableName: 'Table-HashKey',
+        Item: {
+          sid: {S: 'sid-unique-identifier-example'},
+          key1: {S: 'some session data'},
+          key2: {N: '12345'}
+        }
+      };
+
+      var stub = sinon.stub(mocks.connectorMock, 'putItem', function(query, callback) {
+          return callback();
+      });
+
+      store.set('sid-unique-identifier-example', sessionToSave, function(err) {
+        if (err) return done(err);
+        expect(stub).to.have.been.calledOnce;
+        expect(stub).to.have.been.calledWith(
+          sinon.match(expectedQuery)
+        );
+        stub.restore();
+        done();
+      });
+    });
+  });
 });
