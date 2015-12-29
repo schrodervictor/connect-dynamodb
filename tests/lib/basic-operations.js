@@ -84,4 +84,34 @@ describe('DynamoDBStore', function() {
 
   });
 
+  describe('#destroy(sid, callback)', function() {
+
+    it('should be able to delete sessions by sid', function(done) {
+
+      var store = new DynamoDBStore({
+        tableName: 'Table-HashKey',
+        dbConnector: mocks.connectorMock
+      });
+
+      var spy = sinon.spy(mocks.connectorMock, 'deleteItem');
+
+      var expectedQuery = {
+        TableName: 'Table-HashKey',
+        ConsistentRead: true,
+        Key: {'sid': {S:
+          'some-sid-here'
+        }}
+      }
+
+      store.destroy('some-sid-here', function(err) {
+        if (err) return done(err);
+        expect(spy).to.have.been.calledWith(
+          sinon.match(expectedQuery)
+        );
+        done();
+      });
+
+    });
+  });
+
 });
