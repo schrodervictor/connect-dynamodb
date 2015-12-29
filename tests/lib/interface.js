@@ -9,13 +9,13 @@ describe('DynamoDBStore', function() {
   });
 
   describe('should implement the mandatory methods', function() {
-    it('mandatory: store.destroy(sid, calback)', function() {
+    it('mandatory: store.destroy(sid, callback)', function() {
       expect(DynamoDBStore).to.respondTo('destroy');
     });
-    it('mandatory: store.get(sid, calback)', function() {
+    it('mandatory: store.get(sid, callback)', function() {
       expect(DynamoDBStore).to.respondTo('get');
     });
-    it('mandatory: store.set(sid, session, calback)', function() {
+    it('mandatory: store.set(sid, session, callback)', function() {
       expect(DynamoDBStore).to.respondTo('set');
     });
   });
