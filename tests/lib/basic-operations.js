@@ -1,7 +1,7 @@
 'use strict';
 var chai = require('chai');
 var mocks = require('./fixtures/energy-db-mock');
-var DynamoDBStore = require('../../lib/store');
+var DynamoDBStore = require('../../lib/store').DynamoDBStore;
 
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
@@ -11,7 +11,7 @@ chai.use(sinonChai);
 var EnergyTable = require('../../node_modules/energy-db/lib/energy-table').EnergyTable;
 
 describe('DynamoDBStore', function() {
-  it('should be able to acquire a connection to DynamoDB (using EnergyDB table)', function(done) {
+  it('should aquire a connection to DynamoDB to the table specified when needed', function(done) {
 
     var store = new DynamoDBStore({
       tableName: 'Table-HashKey',

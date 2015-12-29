@@ -1,7 +1,7 @@
 'use strict';
 var expect = require('chai').expect;
 var EventEmitter = require('events').EventEmitter;
-var DynamoDBStore = require('../../lib/store');
+var DynamoDBStore = require('../../lib/store').DynamoDBStore;
 
 describe('DynamoDBStore', function() {
   it('should inherit from EventEmiter', function() {
