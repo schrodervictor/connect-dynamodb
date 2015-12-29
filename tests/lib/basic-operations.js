@@ -114,4 +114,55 @@ describe('DynamoDBStore', function() {
     });
   });
 
+  describe('#get(sid, callback)', function() {
+    it('should be able to query and retrieve the session by sid', function(done) {
+      var store = new DynamoDBStore({
+        tableName: 'Table-HashKey',
+        dbConnector: mocks.connectorMock
+      });
+
+      var expectedQuery = {
+        TableName: 'Table-HashKey',
+        ExpressionAttributeNames: {
+          '#k0': 'sid',
+        },
+        ExpressionAttributeValues: {
+          ':v0': {S: 'sid-unique-identifier-example'},
+        },
+        KeyConditionExpression: '#k0 = :v0'
+      };
+
+      var expectedResponse = {
+        TableName: 'Table-HashKey',
+        Items: [
+          {
+            sid: {S: 'sid-unique-identifier-example'},
+            key1: {S: 'some session data'},
+            key2: {N: 12345}
+          }
+        ]
+      };
+
+      var expectedSession = {
+        sid: 'sid-unique-identifier-example',
+        key1: 'some session data',
+        key2: 12345
+      };
+
+      var stub = sinon.stub(mocks.connectorMock, 'query', function(query, callback) {
+          return callback(null, expectedResponse);
+      });
+
+      store.get('sid-unique-identifier-example', function(err, session, callback) {
+        expect(session).to.deep.equals(expectedSession);
+        expect(stub).to.have.been.calledOnce;
+        expect(stub).to.have.been.calledWith(
+          sinon.match(expectedQuery)
+        );
+        stub.restore();
+        done();
+      });
+    });
+  });
+
 });
