@@ -55,4 +55,33 @@ describe('DynamoDBStore', function() {
 
   });
 
+  it('should use consistent reads by default', function(done) {
+
+    var store = new DynamoDBStore({
+      tableName: 'Table-HashKey',
+      dbConnector: mocks.connectorMock
+    });
+
+    store.getTable(function(err, table) {
+      expect(table.queryBase.ConsistentRead).to.be.true;
+      done();
+    });
+
+  });
+
+  it('should be possible to use eventual consistent reads, if needed', function(done) {
+
+    var store = new DynamoDBStore({
+      tableName: 'Table-HashKey',
+      dbConnector: mocks.connectorMock,
+      consistentRead: false
+    });
+
+    store.getTable(function(err, table) {
+      expect(table.queryBase.ConsistentRead).to.be.false;
+      done();
+    });
+
+  });
+
 });
