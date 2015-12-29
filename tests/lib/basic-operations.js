@@ -1,7 +1,13 @@
 'use strict';
-var expect = require('chai').expect;
+var chai = require('chai');
 var mocks = require('./fixtures/energy-db-mock');
 var DynamoDBStore = require('../../lib/store');
+
+var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var expect = chai.expect;
+chai.use(sinonChai);
+
 var EnergyTable = require('../../node_modules/energy-db/lib/energy-table').EnergyTable;
 
 describe('DynamoDBStore', function() {
@@ -18,4 +24,35 @@ describe('DynamoDBStore', function() {
     });
 
   });
+
+  it('should pass the EnergyDB settings to EnergyDB connection', function(done) {
+
+    var store = new DynamoDBStore({
+      tableName: 'Table-HashKey',
+      dbConnector: mocks.connectorMock,
+      endpoint: 'test-value',
+      accessKeyId: 'test-value',
+      secretAccessKey: 'test-value',
+      region: 'test-value'
+    });
+
+    var energyDBSettings = {
+      endpoint: 'test-value',
+      accessKeyId: 'test-value',
+      secretAccessKey: 'test-value',
+      region: 'test-value'
+    };
+
+    var stub = sinon.stub(require('energy-db'), 'connect', mocks.connect);
+
+    store.getTable(function(err, table) {
+      expect(stub).to.have.been.calledWith(
+        sinon.match(energyDBSettings)
+      );
+      stub.restore();
+      done();
+    });
+
+  });
+
 });
