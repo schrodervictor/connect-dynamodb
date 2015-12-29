@@ -2,12 +2,17 @@
 'use strict';
 var expect = require('chai').expect;
 var EventEmitter = require('events').EventEmitter;
+var ExpressSessionStore = require('./fixtures/express-session');
 
-var Store = require('../../index')();
+var Store = require('../../index')({Store: ExpressSessionStore});
 
 describe('DynamoDBStore (exported constructor)', function() {
   it('should inherit from EventEmiter', function() {
     expect(Store.prototype).to.be.an.instanceOf(EventEmitter);
+  });
+
+  it('should (ideally) inherit from the default session Store', function() {
+    expect(Store.prototype).to.be.an.instanceOf(ExpressSessionStore);
   });
 
   describe('should implement the mandatory methods', function() {
@@ -22,4 +27,15 @@ describe('DynamoDBStore (exported constructor)', function() {
     });
   });
 
+  describe('should respond to the methods implemented by the default store', function() {
+    it('store.regenerate(req, fn)', function() {
+      expect(Store).to.respondTo('regenerate');
+    });
+    it('store.regenerate(sid, fn)', function() {
+      expect(Store).to.respondTo('load');
+    });
+    it('store.createSession(req, sess)', function() {
+      expect(Store).to.respondTo('createSession');
+    });
+  });
 });
