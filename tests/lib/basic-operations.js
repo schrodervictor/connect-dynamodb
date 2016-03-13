@@ -10,6 +10,12 @@ chai.use(sinonChai);
 
 var EnergyTable = require('../../node_modules/energy-db/lib/energy-table').EnergyTable;
 
+before(function() {
+  process.env.AWS_ACCESS_KEY = 'AAAAAAAAAA';
+  process.env.AWS_SECRET_KEY = 'SSSSSSSSSS';
+  process.env.AWS_REGION = 'fi-narnia-1';
+});
+
 describe('DynamoDBStore', function() {
   it('should aquire a connection to DynamoDB to the table specified when needed', function(done) {
 
@@ -54,6 +60,33 @@ describe('DynamoDBStore', function() {
     });
 
   });
+
+  it('should be able to discover the AWS credentials from the env variables',
+    function(done) {
+
+      var store = new DynamoDBStore({
+        tableName: 'Table-HashKey',
+        dbConnector: mocks.connectorMock,
+      });
+
+      var energyDBSettings = {
+        accessKeyId: 'AAAAAAAAAA',
+        secretAccessKey: 'SSSSSSSSSS',
+        region: 'fi-narnia-1'
+      };
+
+      var stub = sinon.stub(require('energy-db'), 'connect', mocks.connect);
+
+      store.getTable(function(err, table) {
+        expect(stub).to.have.been.calledWith(
+          sinon.match(energyDBSettings)
+        );
+        stub.restore();
+        done();
+      });
+
+    }
+  );
 
   it('should not call the AWS API multiple times to describe table', function(done) {
 
