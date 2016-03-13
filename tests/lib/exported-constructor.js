@@ -2,7 +2,7 @@
 'use strict';
 var expect = require('chai').expect;
 var EventEmitter = require('events').EventEmitter;
-var ExpressSessionStore = require('./fixtures/express-session');
+var ExpressSessionStore = require('./fixtures/express-session-store');
 
 var Store = require('../../index')({Store: ExpressSessionStore});
 

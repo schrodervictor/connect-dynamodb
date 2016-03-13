@@ -116,7 +116,6 @@ describe('DynamoDBStore', function() {
 
       var expectedQuery = {
         TableName: 'Table-HashKey',
-        ConsistentRead: true,
         Key: {'sid': {S:
           'some-sid-here'
         }}
@@ -142,6 +141,7 @@ describe('DynamoDBStore', function() {
 
       var expectedQuery = {
         TableName: 'Table-HashKey',
+        ConsistentRead: true,
         ExpressionAttributeNames: {
           '#k0': 'sid',
         },
@@ -183,7 +183,6 @@ describe('DynamoDBStore', function() {
       });
     });
   });
-
 
   describe('#set(sid, session, callback)', function() {
     it('should be able to save the session for a given sid', function(done) {
