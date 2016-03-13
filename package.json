@@ -5,7 +5,7 @@
   "author": "Victor Schröder <schrodervictor@gmail.com> (https://github.com/schrodervictor)",
   "license": "MIT",
   "dependencies": {
-    "energy-db": "file:../energy-db"
+    "energy-db": "0.0.6"
   },
   "devDependencies": {
     "chai": "^3.4.1",
