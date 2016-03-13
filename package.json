@@ -1,6 +1,6 @@
 {
-  "name": "connect-dynamodb",
-  "version": "0.0.1",
+  "name": "dynamodb-session-store",
+  "version": "0.0.2",
   "description": "An Express session storage using AWS DynamoDB",
   "author": "Victor Schröder <schrodervictor@gmail.com> (https://github.com/schrodervictor)",
   "license": "MIT",

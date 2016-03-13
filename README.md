@@ -1,5 +1,5 @@
-connect-dynamodb
-================
+dynamodb-session-store
+======================
 
 DynamoDB is a fully managed key/value store offered by AWS that promisses to
 be highly scalable and fast.
@@ -30,7 +30,7 @@ most of the session storages out there:
 
 ```javascript
 var session = require('express-session');
-var DynamoDBStore = require('connect-dynamodb')(session);
+var DynamoDBStore = require('dynamodb-session-store')(session);
  
 var options = {
   tableName: 'Ultraviolet-Sessions'
@@ -90,6 +90,11 @@ Fork the repo, create a branch, do awesome additions and submit a
 pull-request. Only PR's with tests will be considered.
 
 ## Releases
+
+* 0.0.2
+
+  * Changes the name of the package to 'dynamodb-session-store'
+
 
 * 0.0.1
 
